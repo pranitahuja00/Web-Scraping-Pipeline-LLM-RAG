@@ -47,7 +47,7 @@ class Fetcher:
 
     def __init__(
         self,
-        user_agent: str = "ResearchProjectCrawler (https://github.com/pranitahuja00)",
+        user_agent: str = "ResearchProjectCrawler (https://github.com/pranitahuja00/Web-Scraping-Pipeline-LLM-RAG)",
         timeout_seconds: int = 10,
         max_retries: int = 2,
         backoff_factor: float = 0.5,
