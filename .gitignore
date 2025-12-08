@@ -1,1 +1,18 @@
 /output_data
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Byte-compiled / optimized files
+*.py[cod]
+
+# C extensions
+*.so
+
+# Virtual environments
+venv/
+.env/
+.env*/

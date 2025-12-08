@@ -41,6 +41,7 @@ def main():
     for i, crawled_page in enumerate(islice(crawler.crawl(), 3), start=1):
         parsed = parse_crawled_page(crawled_page)
 
+        print("\n-----------------------------")
         print(f"[{i}] URL: {parsed.url}")
         print(f"    Depth:  {parsed.depth}")
         print(f"    Title:  {parsed.title!r}")
@@ -48,6 +49,7 @@ def main():
         print(f"    Headings: {parsed.headings}")
         snippet = parsed.body_text[:400].replace("\n", " ")
         print(f"    Body snippet: {snippet} ...\n")
+        print("\n-----------------------------")
 
     print("Parser test completed.\n")
 

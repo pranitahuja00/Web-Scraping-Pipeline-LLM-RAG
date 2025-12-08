@@ -43,12 +43,13 @@ def main():
     count = 0
     for page in crawler.crawl():
         count += 1
+        print("\n-----------------------------")
         print(f"[{count}] URL: {page.url}")
         print(f"    Depth:  {page.depth}")
         print(f"    Parent: {page.parent_url}")
         snippet = page.html[:200].replace("\n", " ")
         print(f"    HTML snippet: {snippet} ...\n")
-
+        print("\n-----------------------------")
 
     print(f"\nCrawl Test Successful, fetched {count} pages.\n")
 

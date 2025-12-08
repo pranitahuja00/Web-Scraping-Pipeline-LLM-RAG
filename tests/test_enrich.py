@@ -44,6 +44,7 @@ def main():
 
         serial = doc.to_serializable_dict()
 
+        print("\n-----------------------------")
         print(f"[{i}] ID: {doc.id}")
         print(f"    URL:          {doc.url}")
         print(f"    Source domain:{doc.source_domain}")
@@ -59,6 +60,7 @@ def main():
         print(f"    Fetched at:   {serial['fetched_at']}")
         body_snippet = doc.body_text[:300].replace("\n", " ")
         print(f"    Body snippet: {body_snippet} ...\n")
+        print("\n-----------------------------")
 
     print("Enrichment test completed.\n")
 
