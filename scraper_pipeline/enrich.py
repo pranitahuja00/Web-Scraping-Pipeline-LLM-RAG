@@ -169,6 +169,10 @@ def build_document(parsed: ParsedPage) -> Document:
     )
     topical_tags = _infer_topical_tags(title=title, body_text=body_text)
 
+    extra_metadata = {
+        "headings": parsed.headings,
+    }
+
     doc = Document(
         id=_generate_id_from_url(parsed.url),
         url=parsed.url,
@@ -182,7 +186,7 @@ def build_document(parsed: ParsedPage) -> Document:
         language=language,
         num_headings=parsed.num_headings,
         topical_tags=topical_tags,
-        extra_metadata={},
+        extra_metadata=extra_metadata
         # word_count, char_count, estimated_reading_time_min will be
         # computed automatically in Document.__post_init__ if left as 0.
     )
