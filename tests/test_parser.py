@@ -45,9 +45,8 @@ def main():
         print(f"[{i}] URL: {parsed.url}")
         print(f"    Depth:  {parsed.depth}")
         print(f"    Title:  {parsed.title!r}")
-        print(f"    Headings: {parsed.num_headings}")
-        print(f"    Has code blocks: {parsed.has_code_blocks}")
-
+        print(f"    Number of Headings: {parsed.num_headings}")
+        print(f"    Headings: {parsed.headings}")
         snippet = parsed.body_text[:400].replace("\n", " ")
         print(f"    Body snippet: {snippet} ...\n")
 
