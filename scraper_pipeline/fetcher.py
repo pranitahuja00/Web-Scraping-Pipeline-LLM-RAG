@@ -1,4 +1,4 @@
-# krew_scraper/fetcher.py
+# scraper_pipeline/fetcher.py
 
 from __future__ import annotations
 

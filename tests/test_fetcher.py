@@ -1,4 +1,4 @@
-# test_fetcher.py
+# tests/test_fetcher.py
 
 from scraper_pipeline.fetcher import Fetcher
 import logging
@@ -13,7 +13,7 @@ def main():
     fetcher = Fetcher()
 
     # 1. Test a valid URL
-    url_ok = "https://docs.python.org/3/"
+    url_ok = "https://www.consumerfinance.gov/ask-cfpb/what-laws-limit-what-debt-collectors-can-say-or-do-en-329/"
     page_ok = fetcher.fetch(url_ok)
     print("\n=== TEST 1: Valid URL ===")
     print("URL:        ", url_ok)
