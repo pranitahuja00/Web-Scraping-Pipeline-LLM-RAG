@@ -2,7 +2,6 @@
 
 import logging
 from itertools import islice
-
 from scraper_pipeline.fetcher import Fetcher
 from scraper_pipeline.crawler import Crawler, CrawlConfig
 from scraper_pipeline.parser import parse_crawled_page

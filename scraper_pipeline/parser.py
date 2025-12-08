@@ -6,23 +6,10 @@ from dataclasses import dataclass
 from typing import List, Optional
 from bs4 import BeautifulSoup, Tag
 from .crawler import CrawledPage
+from .config_behavior import PARSER_BAD_CONTAINER_HINTS, PARSER_GENERIC_HEADING_WORDS, PARSER_MIN_HEADING_LEN
+
 
 logger = logging.getLogger(__name__)
-
-
-# Class/id/role substrings commonly used for nav, footer, sidebars, and other "chrome"
-BAD_CONTAINER_HINTS = [
-    "nav", "menu", "footer", "header", "sidebar", "side-bar",
-    "related", "breadcrumb", "search", "site-tools", "utility"
-]
-
-# Generic heading words that are almost always navigation/help/footer content
-GENERIC_HEADING_WORDS = {
-    "home", "search", "about", "about us", "contact", "contact us",
-    "legal", "legal disclaimer", "more", "resources", "help",
-}
-
-MIN_HEADING_LEN = 8  # skip very short generic headings
 
 
 @dataclass
@@ -125,7 +112,7 @@ def _is_chrome_container(tag: Tag) -> bool:
             attr_values.append(str(v).lower())
 
     # substring match → robust to variations like "top-nav", "footer-section"
-    return any(hint in value for value in attr_values for hint in BAD_CONTAINER_HINTS)
+    return any(hint in value for value in attr_values for hint in PARSER_BAD_CONTAINER_HINTS)
 
 
 def _remove_chrome_sections(container: Tag) -> None:
@@ -155,10 +142,10 @@ def _heading_passes_filters(text: str) -> bool:
     stripped = text.strip()
     lower = stripped.lower()
 
-    if len(stripped) < MIN_HEADING_LEN:
+    if len(stripped) < PARSER_MIN_HEADING_LEN:
         return False
 
-    if lower in GENERIC_HEADING_WORDS:
+    if lower in PARSER_GENERIC_HEADING_WORDS:
         return False
 
     return True

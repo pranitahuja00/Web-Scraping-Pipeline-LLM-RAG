@@ -9,14 +9,10 @@ from urllib.parse import urlparse
 from .models import Document
 from .parser import ParsedPage
 from langdetect import detect, LangDetectException
+from .config_behavior import TOPIC_KEYWORDS
 
 
 # --- Simple language detection ---------------------------------------------
-
-ENGLISH_STOPWORDS = {
-    "the", "and", "or", "is", "are", "of", "to", "in", "for", "with",
-    "that", "this", "on", "by", "as", "it", "at", "from", "be", "an",
-}
 
 
 def _detect_language(text: str) -> str:
@@ -54,36 +50,6 @@ def _classify_content_type(url: str, body_text: str, num_headings: int) -> str:
         return "article"
 
     return "unknown"
-
-
-# --- Topical tags for credit-servicing -------------------------------------
-
-TOPIC_KEYWORDS = {
-    "payments": [
-        "payment", "payments", "pay my bill", "due date",
-        "autopay", "auto-pay", "automatic payment",
-    ],
-    "late_fees": [
-        "late fee", "late fees", "past due", "delinquent",
-        "overdue", "late charge", "late charges",
-    ],
-    "hardship": [
-        "hardship", "forbearance", "payment relief", "relief program",
-        "difficulty paying", "cant pay", "can't pay",
-    ],
-    "disputes": [
-        "dispute", "chargeback", "fraudulent", "unauthorized",
-        "billing error", "report fraud", "report a charge",
-    ],
-    "interest": [
-        "interest rate", "apr", "annual percentage rate",
-        "variable rate", "fixed rate",
-    ],
-    "fees": [
-        "fee", "fees", "annual fee", "balance transfer fee",
-        "cash advance fee",
-    ],
-}
 
 
 def _infer_topical_tags(title: str, body_text: str) -> List[str]:
