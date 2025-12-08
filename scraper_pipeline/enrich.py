@@ -181,7 +181,6 @@ def build_document(parsed: ParsedPage) -> Document:
         content_type=content_type,
         language=language,
         num_headings=parsed.num_headings,
-        has_code_blocks=parsed.has_code_blocks,
         topical_tags=topical_tags,
         extra_metadata={},
         # word_count, char_count, estimated_reading_time_min will be

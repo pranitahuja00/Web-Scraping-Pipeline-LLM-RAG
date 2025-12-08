@@ -3,7 +3,7 @@
 from __future__ import annotations
 import logging
 from dataclasses import dataclass
-from typing import Optional, Tuple
+from typing import List, Optional
 from bs4 import BeautifulSoup
 from .crawler import CrawledPage
 
@@ -23,9 +23,9 @@ class ParsedPage:
     title: str
     body_text: str
     num_headings: int
-    has_code_blocks: bool
     depth: int
     parent_url: Optional[str]
+    headings: List[str]  # All headings (h1–h6) as plain strings
 
 
 def _extract_title(soup: BeautifulSoup) -> str:
@@ -91,7 +91,7 @@ def _clean_text(raw_text: str) -> str:
     - Strip leading/trailing spaces per line.
     """
     lines = raw_text.splitlines()
-    cleaned_lines = []
+    cleaned_lines: List[str] = []
 
     for line in lines:
         stripped = line.strip()
@@ -111,11 +111,13 @@ def parse_crawled_page(page: CrawledPage) -> ParsedPage:
     Parse a CrawledPage (HTML) into a ParsedPage (clean text + metadata).
 
     Steps:
-    - Remove scripts/styles.
+    - Remove scripts/styles/noscript.
     - Extract title.
     - Choose a main content container (main/article/div).
+    - Collect all headings (h1–h6) into a list.
+    - Remove only the first <h1> from the container (to avoid duplicating title).
     - Extract text, normalize whitespace.
-    - Compute num_headings and has_code_blocks.
+    - Compute num_headings.
     """
     html = page.html
     soup = BeautifulSoup(html, "lxml")
@@ -124,33 +126,47 @@ def parse_crawled_page(page: CrawledPage) -> ParsedPage:
     for tag in soup(["script", "style", "noscript"]):
         tag.decompose()
 
+    # Extract title from <title> or first <h1>
     title = _extract_title(soup)
 
+    # Choose main content container
     main_container = _choose_main_container(soup)
     if not main_container:
         logger.warning("No main container found for URL %s", page.url)
         main_container = soup
 
-    # Extract text with structure preserved via newlines
-    raw_text = main_container.get_text(separator="\n")
+    # --- Extract all headings (h1–h6) before mutating the container ---
+    heading_tags = main_container.find_all(["h1", "h2", "h3", "h4", "h5", "h6"])
+    headings_list: List[str] = [
+        h.get_text(strip=True)
+        for h in heading_tags
+        if h.get_text(strip=True)
+    ]
 
-    # Clean up whitespace
+    # --- Remove only the first <h1> so it doesn't appear in body_text ---
+    first_h1 = main_container.find("h1")
+    if first_h1:
+        first_h1.decompose()
+
+    # --- Extract text from the remaining content ---
+    # H2+ headings still remain and will appear in body_text, which is good
+    # for structure and retrieval.
+    raw_text = main_container.get_text(separator="\n")
     body_text = _clean_text(raw_text)
 
-    # Count headings within main container (h1–h3 is usually enough for FAQs/docs)
-    num_headings = 0
-    for level in ("h1", "h2", "h3"):
-        num_headings += len(main_container.find_all(level))
-
-    # Detect presence of code/pre blocks (not super relevant for CFPB, but generic)
-    has_code_blocks = bool(main_container.find(["pre", "code"]))
+    # --- Count headings (h1–h3) using the original heading tags ---
+    num_headings = sum(
+        1
+        for h in heading_tags
+        if h.name in ("h1", "h2", "h3")
+    )
 
     return ParsedPage(
         url=page.url,
         title=title,
         body_text=body_text,
         num_headings=num_headings,
-        has_code_blocks=has_code_blocks,
         depth=page.depth,
         parent_url=page.parent_url,
+        headings=headings_list,
     )

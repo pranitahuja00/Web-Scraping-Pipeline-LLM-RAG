@@ -34,7 +34,6 @@ class Document:
     char_count: int = 0
     estimated_reading_time_min: float = 0.0
     num_headings: int = 0
-    has_code_blocks: bool = False
 
     # 6. Credit-servicing specific info
     topical_tags: List[str] = None  # e.g. ["payments", "late_fees", "hardship"]
