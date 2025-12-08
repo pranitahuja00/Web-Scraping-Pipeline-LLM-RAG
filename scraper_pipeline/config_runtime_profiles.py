@@ -6,10 +6,10 @@ Used by run_pipeline.py to construct CrawlConfig.
 """
 
 CRAWL_PROFILES = {
-    "cfpb_credit_cards": {
+    "cfpb": {
         "allowed_domain": "consumerfinance.gov",
         "start_urls": [
-            "https://www.consumerfinance.gov/consumer-tools/credit-cards/answers/",
+            "https://www.consumerfinance.gov/ask-cfpb/",
         ],
         "allowed_path_prefixes": [
             "/consumer-tools/credit-cards/answers/",
