@@ -47,8 +47,8 @@ Both modes support:
 
 Create and activate a virtual environment:
 
-    python3 -m venv krew-web-scraper
-    source krew-web-scraper/bin/activate
+    python3 -m venv web-scraper
+    source web-scraper/bin/activate
     pip install -r requirements.txt
 
 ---
