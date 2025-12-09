@@ -22,6 +22,7 @@ CRAWL_PROFILES = {
         "max_depth": 2,
         "max_pages": 200,
         "delay_seconds": 0.5,
+        "default_output": "output_data/cfpb.jsonl",
     },
 
     # Add more profiles here...
